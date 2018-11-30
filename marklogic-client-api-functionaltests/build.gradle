@@ -1,0 +1,38 @@
+test {
+  testLogging{
+    events 'started','passed', 'skipped'
+  }
+  /* For use in testing TestDatabaseClientKerberosFromFile */
+  systemProperty "keytabFile", System.getProperty("keytabFile")
+  systemProperty "principal", System.getProperty("principal")
+  
+  exclude 'com/marklogic/client/functionaltest/TestSSLConnection.class'
+  exclude 'com/marklogic/client/functionaltest/TestBug18993.class'
+  exclude 'com/marklogic/client/functionaltest/TestDatabaseClientWithKerberos.class'
+  exclude 'com/marklogic/client/functionaltest/TestDatabaseClientKerberosFromFile.class'
+  exclude 'com/marklogic/client/functionaltest/TestDatabaseClientWithCertBasedAuth.class'
+  exclude 'com/marklogic/client/functionaltest/TestSandBox.class'
+}
+
+/* The minimal number of tests that run in a sandbox environment */
+
+task testSandbox(type:Test) {
+  include 'com/marklogic/client/functionaltest/TestSandBox.class'
+}
+
+/* The code repositories to consult for dependencies */
+
+repositories {
+  maven {url "http://distro.marklogic.com/nexus/repository/maven-snapshots" }
+  maven { url "http://developer.marklogic.com/maven2" }
+}
+
+dependencies {  
+  compile project (':marklogic-client-api')
+  compile group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
+  compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.0'
+  compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.0'
+  compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.25'
+  testCompile group: 'ch.qos.logback', name: 'logback-classic', version:'1.2.3'
+  compile group: 'commons-io', name: 'commons-io', version: '2.6'
+}
